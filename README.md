@@ -1,9 +1,3 @@
-**Table of Contents**
-
-[TOCM]
-
-[TOC]
-
 #wat iz
 Ansible to run osqueri queries on hosts, collect the output, and store it locally on your Ansible host. These JSON files can then be processed by Logsash and stored in Elasticsearch.
 
