@@ -19,7 +19,7 @@ This play produces files with output in JSON formatting. Each "question" from ea
 
 This makes it easier to identify files on disk and during logstash processing.
 
-# Not great
+# Things that aren't great
 Check out issues in the repo, I'll keep those more update than the README, likely.
 
 ## Optimization 
