@@ -1,0 +1,21 @@
+# Ignore retry files
+*.retry
+
+# Ignore vim swp files
+*.swp
+
+# Ignore temporary garbage files
+*.tmp
+
+# Ignore any caches in the ansible fact cache directory
+# But check in the empty directory
+!factcache/
+factcache/*
+
+# Don't check in the results of the questions. Duh.
+# But check in the empty directory
+!output/
+output/*
+
+# Don't check in *my* user-vars.yml. We'll check in a template instead.
+user-vars.yml

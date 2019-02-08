@@ -1,0 +1,128 @@
+- hosts: "{{ run_where }}"
+  strategy: free
+  
+  vars_prompt:
+    - name: "run_where"
+      prompt: "Group to target"
+      private: no
+  
+  vars:
+    out_path: "../output"
+
+  vars_files:
+    - ../user-vars.yml
+
+  tasks:
+  - block:
+    - name: "Checking directories"
+      stat:
+        path: "{{item}}"
+      register: dir_stats
+      with_items:
+      - ["{{out_path}}", 
+      "{{out_path}}/{{loc_name}}/", 
+      "{{out_path}}/{{loc_name}}/kernelinfo/",
+      "{{out_path}}/{{loc_name}}/yumsrc/",
+      "{{out_path}}/{{loc_name}}/sudoers/",
+      "{{out_path}}/{{loc_name}}/osver/",
+      "{{out_path}}/{{loc_name}}/sudoers/",
+      "{{out_path}}/{{loc_name}}/loggedinusers/",
+      "{{out_path}}/{{loc_name}}/listenports/",
+      "{{out_path}}/{{loc_name}}/users/",
+      "{{out_path}}/{{loc_name}}/disk_encryption/",
+      "{{out_path}}/{{loc_name}}/groups_list/"
+      ]
+      delegate_to: localhost
+    - name: "Creating missing directories"
+      file:
+        path: "{{item.item}}"
+        state: directory
+        mode: 0755
+        owner: "{{ ansible_user_id }}"
+        group: "{{ ansible_user_id }}"
+      when: item.stat.exists == false
+      with_items:
+        - "{{dir_stats.results}}"
+      delegate_to: localhost
+    run_once: true
+  
+  - name: Ask about users
+    command: osqueryi --json "SELECT * FROM users"
+    register: users
+    become: yes
+    become_method: sudo
+
+  - name: Ask about disk encryption
+    command: osqueryi --json "SELECT * FROM disk_encryption"
+    register: disk_encryption
+    become: yes
+    become_method: sudo
+
+  - name: Ask about groups
+    command: osqueryi --json "SELECT * FROM groups"
+    register: groups_list
+    become: yes
+    become_method: sudo
+
+  - name: Ask about kernel_info
+    command: osqueryi --json "SELECT * FROM kernel_info"
+    register: kernelinfo
+    become: yes
+    become_method: sudo
+
+  - name: Ask about listening network ports
+    command: osqueryi --json "SELECT * FROM listening_ports where socket != 0"
+    register: listenports
+    become: yes
+    become_method: sudo
+  
+  - name: Ask about logged in users
+    command: osqueryi --json "SELECT * FROM logged_in_users"
+    register: loggedinusers
+    become: yes
+    become_method: sudo
+  
+  - name: Ask about OS version
+    command: osqueryi --json "SELECT * FROM os_version"
+    register: osver
+    become: yes
+    become_method: sudo
+  
+  - name: Ask about sudoers
+    command: osqueryi --json "SELECT * FROM sudoers"
+    register: sudoers
+    become: yes
+    become_method: sudo
+    
+  - name: Ask about YUM repository sources
+    command: osqueryi --json "SELECT * FROM yum_sources"
+    register: yumsrc
+    become: yes
+    become_method: sudo  
+  
+
+   # Dump the output of the queries to local files
+
+  - name: Copy output to local files
+    local_action: copy content="{{ item.value }}" dest="{{out_path}}/{{ loc_name }}/{{ item.variable }}/{{ ansible_fqdn }}-{{ item.variable }}.out"
+    with_items:
+      - variable: yumsrc
+        value:  "{{ yumsrc.stdout }}"
+      - variable: sudoers
+        value:  "{{ sudoers.stdout }}"
+      - variable: kernelinfo
+        value:  "{{ kernelinfo.stdout }}"
+      - variable: osver
+        value:  "{{ osver.stdout }}"
+      - variable: loggedinusers
+        value:  "{{ loggedinusers.stdout }}"
+      - variable: listenports
+        value:  "{{ listenports.stdout }}"
+      - variable: users
+        value:  "{{ users.stdout }}"
+      - variable: disk_encryption
+        value:  "{{ disk_encryption.stdout }}"
+      - variable: groups_list
+        value:  "{{ groups_list.stdout }}"
+
+  

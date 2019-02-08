@@ -1,0 +1,14 @@
+all:
+  children:
+    jump:      
+      hosts:
+       localhost 
+    cattle:
+      hosts:
+		  127.0.0.2
+		  172.0.0.3
+  
+  vars:
+    ansible_ssh_user: "{{my_sample-env_user}}"
+    ansible_ssh_private_key_file: "{{my_sample-env_key}}"
+    loc_name: sample-env

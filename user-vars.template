@@ -1,0 +1,9 @@
+---
+my_sample-env_user: ubuntu
+my_sample-env_key: /home/CHOOCHOO/.ssh/totes-private.key
+
+my_other-env_user: alice
+my_other-env_key: /home/alive/.ssh/go-away-eve.key
+
+my_third-env_user: bob
+my_third-env_key: /home/bob/.ssh/actually-eve.key

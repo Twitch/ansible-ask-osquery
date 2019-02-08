@@ -1,0 +1,5 @@
+# Don't check in things from here. This is for caching inventory facts
+*
+
+# Keep this, though.
+!.gitignore
