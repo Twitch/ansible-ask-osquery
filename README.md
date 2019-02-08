@@ -1,9 +1,9 @@
-#wat iz
+# wat iz
 Ansible to run osqueri queries on hosts, collect the output, and store it locally on your Ansible host. These JSON files can then be processed by Logsash and stored in Elasticsearch.
 
 It's no Fleet, but it will answer questions for now and can be scheduled.
 
-#How To
+# How To
 ## Running
 Once checked out, you'll need to create your own user-vars.yml. This will define your username and the path to your private key for the environments. You can crib from the user-vars.template to create your own.
 
