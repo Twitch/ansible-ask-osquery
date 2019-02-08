@@ -5,7 +5,7 @@ It's no Fleet, but it will answer questions for now and can be scheduled.
 
 # How To
 ## Running
-Once checked out, you'll need to create your own user-vars.yml. This will define your username and the path to your private key for the environments. You can crib from the user-vars.template to create your own.
+Once checked out, **you must create your own user-vars.yml.** This will define your username and the path to your private key for the environments. You can crib from the user-vars.template to create your own.
 
 From the top level directory you can run:
 `$ ansible-playbook plays/osq.questions.yml --ask-sudo-pass -i inventories/($inv.file.yml)`
